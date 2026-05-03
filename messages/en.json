@@ -1,0 +1,19 @@
+{
+  "PetCard": {
+    "sex": "Sex",
+    "age": "Age",
+    "weight": "Weight",
+    "health": "Health",
+    "male": "Male",
+    "female": "Female",
+    "yr": "yr",
+    "mo": "mo",
+    "kg": "kg"
+  },
+  "PetSelector": {
+    "empty": "No pets found"
+  },
+  "Dashboard": {
+    "title": "My Pets"
+  }
+}
