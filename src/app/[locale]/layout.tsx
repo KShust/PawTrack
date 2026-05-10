@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import AppShell from '@/components/layout/AppShell';
 
 export default async function LocaleLayout({
   children,
@@ -20,7 +21,9 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      {children}
+      <AppShell>
+        {children}
+      </AppShell>
     </NextIntlClientProvider>
   );
 }
