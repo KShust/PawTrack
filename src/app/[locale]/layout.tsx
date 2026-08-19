@@ -4,23 +4,25 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import AppShell from '@/components/layout/AppShell';
 
+type Locale = (typeof routing.locales)[number];
+
 export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;  // ← Promise
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;  // ← await
+  const { locale } = await params;
 
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
 
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <AppShell>
         {children}
       </AppShell>

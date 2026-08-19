@@ -16,12 +16,12 @@ const DashboardPage = async () => {
     .order('created_at', { ascending: true })
 
   return (
-    <main className="min-h-screen p-8" style={{ background: 'var(--bg-base)' }}>
+    <div className="min-h-screen p-8" style={{ background: 'var(--bg-base)' }}>
       <div className="max-w-5xl mx-auto">
         <h1 className="text-heading-1 mb-6">{t('title')}</h1>
         <PetSelector pets={Array.isArray(pets) ? (pets as Pet[]) : []} />
       </div>
-    </main>
+    </div>
   )
 }
 

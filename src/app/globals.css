@@ -1,90 +1,204 @@
 @import "tailwindcss";
 
-/* ── Fonts ────────────────────────────────────────────────── */
+/* Class-based dark mode: enables `dark:` utilities alongside the token
+   overrides defined in the `.dark` block below. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================================
+   TIER 1 — PRIMITIVE TOKENS
+   Raw palette values. No meaning attached; components never read these
+   directly. Exposed to Tailwind so `bg-primary`, `rounded-lg`, … work.
+   ============================================================================ */
 @theme inline {
   --font-sans: var(--font-nunito);
 
-  /* ── Colors: Primary (sage green) ──────────────────────── */
+  /* ── Palette: Primary (sage green) ─────────────────────── */
   --color-primary:       #6A9E7A;
-  --color-primary-dark:  #4E7A5E;
+  --color-primary-dark:  #476F55;
   --color-primary-light: #EAF2EC;
 
-  /* ── Colors: Accent (warm amber/peach) ─────────────────── */
+  /* ── Palette: Accent (warm amber/peach) ────────────────── */
   --color-accent:        #F4A261;
-  --color-accent-dark:   #E8875A;
+  --color-accent-dark:   #A85520;
   --color-accent-light:  #FEF0E4;
 
-  /* ── Colors: Purple ─────────────────────────────────────── */
+  /* ── Palette: Purple ───────────────────────────────────── */
   --color-purple:        #9B8EC4;
-  --color-purple-dark:   #7B6BA8;
+  --color-purple-dark:   #6E5D9C;
   --color-purple-light:  #F0EDF9;
 
-  /* ── Colors: Blue ───────────────────────────────────────── */
+  /* ── Palette: Blue ─────────────────────────────────────── */
   --color-blue:          #6AABCE;
-  --color-blue-dark:     #4A8BAE;
+  --color-blue-dark:     #3B6E8C;
   --color-blue-light:    #E8F4FA;
 
-  /* ── Colors: Neutral (warm gray) ───────────────────────── */
+  /* ── Palette: Neutral (warm gray) ──────────────────────── */
   --color-neutral-50:  #FAFAF8;
   --color-neutral-100: #F5F4F0;
   --color-neutral-200: #E8E6E1;
   --color-neutral-300: #D4D1CA;
   --color-neutral-400: #A8A49B;
-  --color-neutral-500: #7C786E;
+  --color-neutral-450: #9A968C;
+  --color-neutral-500: #6E6A60;
   --color-neutral-600: #5A5650;
   --color-neutral-700: #3D3A35;
   --color-neutral-800: #2A2723;
   --color-neutral-900: #1A1815;
 
-  /* ── Border radius ──────────────────────────────────────── */
+  /* ── Palette: dark-theme accent surfaces ───────────────── */
+  --color-primary-deep: #25382C;
+  --color-primary-soft: #8FBF9F;
+  --color-accent-deep:  #3D2A19;
+  --color-accent-soft:  #F0A870;
+  --color-purple-deep:  #2E2940;
+  --color-purple-soft:  #B9AEDC;
+  --color-blue-deep:    #1F3340;
+  --color-blue-soft:    #8FC5E0;
+
+  /* ── Border radius (monotonic ladder) ──────────────────── */
   --radius-sm:   8px;
   --radius-md:   12px;
   --radius-lg:   14px;
-  --radius-xl:   24px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-3xl:  24px;
   --radius-full: 9999px;
 }
 
-/* ── CSS variables (runtime, dark mode aware) ─────────────── */
+/* ============================================================================
+   TIER 2 — SEMANTIC TOKENS
+   The layer components read. Light is the default theme; `.dark` on <html>
+   re-points the same names at dark values, so no component needs a
+   theme-specific branch.
+   ============================================================================ */
 :root {
-  --bg-base:     #FAFAF8;
-  --bg-surface:  #FFFFFF;
-  --bg-muted:    #F5F4F0;
+  color-scheme: light;
 
-  --text-primary:   #1A1815;
-  --text-secondary: #5A5650;
-  --text-muted:     #A8A49B;
+  /* ── Surfaces ──────────────────────────────────────────── */
+  --bg-base:    var(--color-neutral-50);
+  --bg-surface: #FFFFFF;
+  --bg-muted:   var(--color-neutral-100);
 
-  --border:       #E8E6E1;
-  --border-strong:#D4D1CA;
+  /* ── Text (contrast vs --bg-surface) ───────────────────── */
+  --text-primary:   var(--color-neutral-900); /* 17.7:1 */
+  --text-secondary: var(--color-neutral-600); /*  7.3:1 */
+  --text-muted:     var(--color-neutral-500); /*  5.4:1, >= 4.7:1 on every tint */
+  --text-on-solid:  #FFFFFF;                  /* on a *-strong fill */
 
+  /* ── Borders ───────────────────────────────────────────── */
+  --border:        var(--color-neutral-200);
+  --border-strong: var(--color-neutral-300);
+
+  /* ── Focus ─────────────────────────────────────────────── */
+  --focus-ring:        var(--color-primary-dark);
+  --focus-ring-width:  2px;
+  --focus-ring-offset: 2px;
+
+  /* ── Accent tints ─────────────────────────────────────────
+     Every family exposes four roles:
+       -bg      subtle fill, sits behind -fg text
+       -fg      text/icon on -bg          (>= 4.5:1)
+       -solid   full-strength brand colour for bars, borders, icons
+       -strong  fill that carries --text-on-solid (>= 4.5:1)
+     ------------------------------------------------------- */
+  --tint-primary-bg:     var(--color-primary-light);
+  --tint-primary-fg:     var(--color-primary-dark);
+  --tint-primary-solid:  var(--color-primary);
+  --tint-primary-strong: var(--color-primary-dark);
+
+  --tint-accent-bg:      var(--color-accent-light);
+  --tint-accent-fg:      var(--color-accent-dark);
+  --tint-accent-solid:   var(--color-accent);
+  --tint-accent-strong:  var(--color-accent-dark);
+
+  --tint-purple-bg:      var(--color-purple-light);
+  --tint-purple-fg:      var(--color-purple-dark);
+  --tint-purple-solid:   var(--color-purple);
+  --tint-purple-strong:  var(--color-purple-dark);
+
+  --tint-blue-bg:        var(--color-blue-light);
+  --tint-blue-fg:        var(--color-blue-dark);
+  --tint-blue-solid:     var(--color-blue);
+  --tint-blue-strong:    var(--color-blue-dark);
+
+  /* ── Elevation ─────────────────────────────────────────── */
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+
+  /* ── Motion ────────────────────────────────────────────── */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
-  --bg-base:    #1A1815;
-  --bg-surface: #2A2723;
-  --bg-muted:   #3D3A35;
+  color-scheme: dark;
 
-  --text-primary:   #FAFAF8;
-  --text-secondary: #D4D1CA;
-  --text-muted:     #7C786E;
+  --bg-base:    var(--color-neutral-900);
+  --bg-surface: var(--color-neutral-800);
+  --bg-muted:   var(--color-neutral-700);
 
-  --border:       #3D3A35;
-  --border-strong:#5A5650;
+  --text-primary:   var(--color-neutral-50);  /* 14.2:1 */
+  --text-secondary: var(--color-neutral-300); /*  9.8:1 */
+  --text-muted:     var(--color-neutral-400); /*  6.0:1 */
+
+  --border:        var(--color-neutral-700);
+  --border-strong: var(--color-neutral-600);
+
+  --focus-ring: var(--color-primary-soft);
+
+  --tint-primary-bg: var(--color-primary-deep);
+  --tint-primary-fg: var(--color-primary-soft);
+
+  --tint-accent-bg:  var(--color-accent-deep);
+  --tint-accent-fg:  var(--color-accent-soft);
+
+  --tint-purple-bg:  var(--color-purple-deep);
+  --tint-purple-fg:  var(--color-purple-soft);
+
+  --tint-blue-bg:    var(--color-blue-deep);
+  --tint-blue-fg:    var(--color-blue-soft);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.40), 0 1px 2px rgba(0,0,0,0.30);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.45);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.55);
 }
 
-/* ── Base ─────────────────────────────────────────────────── */
+/* ============================================================================
+   Base
+   ============================================================================ */
 body {
   background: var(--bg-base);
   color: var(--text-primary);
 }
 
-/* ── Components ───────────────────────────────────────────── */
+/* One token-driven focus indicator for every interactive element.
+   `:focus-visible` keeps it off pointer clicks but on for keyboard users. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Honour the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   TIER 3 — COMPONENT CLASSES
+   ============================================================================ */
 @layer components {
 
-  /* Typography */
+  /* ── Typography ────────────────────────────────────────── */
   .text-display {
     @apply text-3xl font-extrabold tracking-tight;
     color: var(--text-primary);
@@ -101,10 +215,9 @@ body {
   }
 
   .text-heading-3 {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
+    @apply text-lg font-bold;
+    color: var(--text-primary);
+  }
 
   .text-body {
     @apply text-sm font-normal;
@@ -121,7 +234,7 @@ body {
     color: var(--text-muted);
   }
 
-  /* Layout */
+  /* ── Surfaces ──────────────────────────────────────────── */
   .surface {
     background: var(--bg-surface);
     border: 1px solid var(--border);
@@ -132,44 +245,43 @@ body {
     border: 1px solid var(--border);
   }
 
-  /* Card */
   .card-base {
-    @apply rounded-3xl;
+    border-radius: var(--radius-3xl);
     background: var(--bg-surface);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
   }
 
-  /* Avatar */
-.avatar-placeholder {
-  @apply rounded-full flex items-center justify-center flex-shrink-0;
-  background: var(--bg-muted);
-}
+  /* ── Avatar ────────────────────────────────────────────── */
+  .avatar-placeholder {
+    @apply rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden;
+    background: var(--bg-muted);
+  }
 
-.avatar-placeholder-white {
-  @apply rounded-full flex items-center justify-center flex-shrink-0;
-  background: var(--bg-surface);
-}
+  .avatar-placeholder-contrast {
+    @apply rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden;
+    background: var(--bg-surface);
+  }
 
-  /* Chip */
-  .chip-base {
+  /* ── Chip ──────────────────────────────────────────────── */
+  .chip-base,
+  .chip-primary,
+  .chip-accent,
+  .chip-neutral {
     @apply inline-flex flex-col items-center justify-center gap-0.5 rounded-full text-xs font-semibold px-3 py-1;
   }
 
   .chip-primary {
-    @apply inline-flex flex-col items-center justify-center gap-0.5 rounded-full text-xs font-semibold px-3 py-1;
-    background: var(--color-primary-light);
-    color: var(--color-primary-dark);
+    background: var(--tint-primary-bg);
+    color: var(--tint-primary-fg);
   }
 
   .chip-accent {
-    @apply inline-flex flex-col items-center justify-center gap-0.5 rounded-full text-xs font-semibold px-3 py-1;
-    background: var(--color-accent-light);
-    color: var(--color-accent-dark);
+    background: var(--tint-accent-bg);
+    color: var(--tint-accent-fg);
   }
 
   .chip-neutral {
-    @apply inline-flex flex-col items-center justify-center gap-0.5 rounded-full text-xs font-semibold px-3 py-1;
     background: var(--bg-muted);
     color: var(--text-secondary);
   }
@@ -182,19 +294,33 @@ body {
     border: 1px solid var(--border-strong);
     padding: 6px 14px;
   }
-}
 
-.nav-item-active {
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
-  font-weight: 600;
-}
+  /* ── Navigation ────────────────────────────────────────── */
+  .nav-item {
+    color: var(--text-secondary);
+  }
 
-.nav-item {
-  color: var(--text-secondary);
-}
+  .nav-item:hover {
+    background: var(--bg-muted);
+    color: var(--text-primary);
+  }
 
-.nav-item:hover {
-  background: var(--bg-muted);
-  color: var(--text-primary);
+  .nav-item-active {
+    background: var(--tint-primary-bg);
+    color: var(--tint-primary-fg);
+    font-weight: 600;
+  }
+
+  /* ── Skip link ─────────────────────────────────────────── */
+  .skip-link {
+    @apply sr-only;
+  }
+
+  .skip-link:focus-visible {
+    @apply not-sr-only fixed top-3 left-3 z-50 px-4 py-2 text-sm font-semibold;
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
+  }
 }

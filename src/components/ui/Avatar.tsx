@@ -7,8 +7,13 @@ interface AvatarProps {
   petType?: PetType
   name: string
   size: 'xs' | 'sm' | 'md' | 'lg'
+  /** Icon colour for the fallback. Pass a `--tint-*-solid` token. */
   color: string
-  variant?: 'default' | 'white'
+  /**
+   * `default` sits on a plain surface, `contrast` on a tinted one — the
+   * placeholder keeps its own background either way.
+   */
+  variant?: 'default' | 'contrast'
 }
 
 const sizes = {
@@ -24,7 +29,7 @@ const Avatar = ({ photoUrl, petType, name, size, color, variant = 'default' }: A
 
   return (
     <div
-      className={variant === 'white' ? 'avatar-placeholder-white' : 'avatar-placeholder'}
+      className={variant === 'contrast' ? 'avatar-placeholder-contrast' : 'avatar-placeholder'}
       style={{ width: box, height: box }}
     >
       {photoUrl ? (
@@ -36,7 +41,8 @@ const Avatar = ({ photoUrl, petType, name, size, color, variant = 'default' }: A
           className="object-cover w-full h-full rounded-full"
         />
       ) : (
-        <PetIcon size={icon} color={color} strokeWidth={1.5} />
+        /* Decorative: the pet's name is always rendered next to the avatar. */
+        <PetIcon size={icon} color={color} strokeWidth={1.5} aria-hidden="true" />
       )}
     </div>
   )
