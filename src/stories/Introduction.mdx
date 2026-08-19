@@ -1,0 +1,79 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design/Introduction" />
+
+# PawTrack UI
+
+A pet health tracker built with Next.js App Router, React 19, TypeScript and Tailwind CSS v4.
+This Storybook is the working surface for the component layer: every reusable component renders
+here in isolation, in both themes, both locales, and at the three breakpoints the app actually
+switches on.
+
+## How this Storybook is set up
+
+**Toolbar controls**
+
+| Control | What it does |
+| --- | --- |
+| Theme | Toggles `.dark` on `<html>`. All colours come from CSS custom properties, so nothing else changes. |
+| Locale | Swaps the `next-intl` message bundle between `en` and `uk`. Ukrainian strings are longer — useful for catching layout that only fits English. |
+| Viewport | Mobile 375 / Tablet 820 / Desktop 1280, straddling the app's 768px and 1024px breakpoints. |
+
+**Panels**
+
+- **Controls** — generated from each component's props interface, including the JSDoc comments on it.
+- **Accessibility** — runs axe-core against the rendered story. It is set to `todo`, so violations are reported but do not fail the run.
+
+## Design tokens
+
+`src/app/globals.css` holds three tiers:
+
+1. **Primitives** — the raw palette and radius ladder, declared in `@theme` so Tailwind generates
+   utilities from them. Components never reference these.
+2. **Semantic tokens** — `--bg-surface`, `--text-muted`, `--tint-accent-fg`, `--focus-ring`, and so
+   on. These carry meaning rather than colour, and the `.dark` block re-points them. This is the
+   only tier components read.
+3. **Component classes** — `.card-base`, `.chip-*`, `.text-heading-*`, built from tier 2.
+
+**Design/Tokens** renders all three, reading the values back out of the live stylesheet and
+computing the contrast ratios on the spot, so the documentation cannot drift from the CSS.
+
+## Accessibility conventions
+
+- Anything clickable is a real `<button>` or `<a>`, never a `<div>` with an `onClick`.
+- Every interactive element gets one shared `:focus-visible` ring, drawn from `--focus-ring`.
+- Icon-only controls keep their label in the DOM as `sr-only` rather than dropping it.
+- Composite widgets follow the WAI-ARIA Authoring Practices — see the tabs in `PetProfileClient`.
+- Text tokens are held to 4.5:1 against every surface they are painted on, in both themes.
+- No user-facing string is hardcoded; everything goes through `next-intl`.
+
+## Adding a story
+
+Stories sit next to the component as `ComponentName.stories.tsx`.
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import Chip from './Chip'
+
+const meta = {
+  title: 'UI/Chip',
+  component: Chip,
+  args: { label: 'Female', sublabel: 'Sex' },
+} satisfies Meta<typeof Chip>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Neutral: Story = {}
+export const Primary: Story = { args: { variant: 'primary' } }
+```
+
+Notes specific to this project:
+
+- A component that calls `useTranslations()` needs no extra setup — the global decorator already
+  wraps every story in `NextIntlClientProvider`.
+- A component that calls `usePathname()` or `useRouter()` also works out of the box; set the route
+  per story with `parameters.nextjs.navigation.pathname`.
+- Pin a story to a viewport with `globals: { viewport: { value: 'mobile' } }`.
+- Reach for the fixtures in `src/components/pets/pets.fixtures.ts` rather than inventing pet data,
+  and prefer the ones that exercise fallbacks (`minimalPet`, `longNamePet`).

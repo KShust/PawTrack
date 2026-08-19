@@ -1,0 +1,20 @@
+/* next/font is stubbed inside Storybook, so --font-nunito never gets defined by
+   the app layout. Load Nunito directly and point the token at it, so stories
+   render in the same typeface as production. */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font-nunito: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-nunito);
+  background: var(--bg-base);
+}
+
+/* Padding for the story canvas, so cards are not flush against the frame. */
+.sb-canvas {
+  min-height: 100%;
+  padding: 1.5rem;
+  background: var(--bg-base);
+}
