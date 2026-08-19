@@ -8,12 +8,52 @@
     "female": "Female",
     "yr": "yr",
     "mo": "mo",
-    "kg": "kg"
+    "kg": "kg",
+    "healthScoreOf": "Health score for {name}"
   },
   "PetSelector": {
-    "empty": "No pets found"
+    "empty": "No pets found",
+    "groupLabel": "Select a pet"
   },
   "Dashboard": {
     "title": "My Pets"
+  },
+  "PetProfile": {
+    "back": "Back",
+    "profile": "Profile",
+    "profileOf": "{name}'s profile",
+    "sex": "Sex",
+    "age": "Age",
+    "weight": "Weight",
+    "male": "Male",
+    "female": "Female",
+    "yr": "yr",
+    "mo": "mo",
+    "kg": "kg",
+    "comingSoon": "Coming soon",
+    "tabsLabel": "Pet profile sections",
+    "tabs": {
+      "overview": "Overview",
+      "health": "Health",
+      "medical": "Medical"
+    },
+    "overview": {
+      "healthScore": "Health Score",
+      "lastWeight": "Last Weight",
+      "excellent": "Excellent",
+      "noData": "No data"
+    }
+  },
+  "Navigation": {
+    "Dashboard": "Dashboard",
+    "Health": "Health",
+    "Medical": "Medical",
+    "Calendar": "Calendar",
+    "Chat": "AI Chat",
+    "Settings": "Settings",
+    "menu": "Menu",
+    "primaryLabel": "Main navigation",
+    "mobileLabel": "Main navigation",
+    "skipToContent": "Skip to main content"
   }
 }

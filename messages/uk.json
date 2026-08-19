@@ -8,12 +8,52 @@
     "female": "Дівчинка",
     "yr": "р",
     "mo": "міс",
-    "kg": "кг"
+    "kg": "кг",
+    "healthScoreOf": "Оцінка здоров'я: {name}"
   },
   "PetSelector": {
-    "empty": "Немає тварин"
+    "empty": "Немає тварин",
+    "groupLabel": "Оберіть тварину"
   },
   "Dashboard": {
     "title": "Мої тварини"
+  },
+  "PetProfile": {
+    "back": "Назад",
+    "profile": "Профіль",
+    "profileOf": "Профіль: {name}",
+    "sex": "Стать",
+    "age": "Вік",
+    "weight": "Вага",
+    "male": "Хлопчик",
+    "female": "Дівчинка",
+    "yr": "р",
+    "mo": "міс",
+    "kg": "кг",
+    "comingSoon": "Незабаром",
+    "tabsLabel": "Розділи профілю тварини",
+    "tabs": {
+      "overview": "Огляд",
+      "health": "Здоров'я",
+      "medical": "Медицина"
+    },
+    "overview": {
+      "healthScore": "Шкала здоров'я",
+      "lastWeight": "Остання вага",
+      "excellent": "Відмінно",
+      "noData": "Дані відсутні"
+    }
+  },
+  "Navigation": {
+    "Dashboard": "Дашборд",
+    "Health": "Здоров'я",
+    "Medical": "Медицина",
+    "Calendar": "Календар",
+    "Chat": "AI Чат",
+    "Settings": "Налаштування",
+    "menu": "Меню",
+    "primaryLabel": "Головна навігація",
+    "mobileLabel": "Головна навігація",
+    "skipToContent": "Перейти до основного вмісту"
   }
 }

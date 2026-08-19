@@ -2,20 +2,24 @@ interface ChipProps {
   label: string
   sublabel?: string
   variant?: 'primary' | 'accent' | 'neutral' | 'outline'
+  /** Overrides the label colour. Pass a `--tint-*-fg` token, not a raw hex. */
   textColor?: string
 }
 
 const Chip = ({ label, sublabel, variant = 'neutral', textColor }: ChipProps) => {
   return (
-    <span
-      className={`chip-${variant}`}
-      style={textColor ? { color: textColor } : undefined}
-    >
-      <span style={{ fontSize: '13px', fontWeight: 700, color: textColor ?? 'var(--text-primary)', fontVariantNumeric: 'normal' }}>
+    <span className={`chip-${variant}`}>
+      <span
+        className="text-sm font-bold leading-tight"
+        style={{ color: textColor ?? 'inherit' }}
+      >
         {label}
       </span>
       {sublabel && (
-        <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-muted)' }}>
+        <span
+          className="text-xs font-medium leading-tight"
+          style={{ color: 'var(--text-muted)' }}
+        >
           {sublabel}
         </span>
       )}
