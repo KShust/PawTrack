@@ -181,6 +181,12 @@ body {
   outline-offset: var(--focus-ring-offset);
 }
 
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  transition: none !important;
+}
+
 /* Honour the OS "reduce motion" setting. */
 @media (prefers-reduced-motion: reduce) {
   *,

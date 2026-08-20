@@ -1,22 +1,16 @@
-import { Pet, PetType } from '@/types'
-import { PET_PALETTES, PetPalette } from '@/lib/petColors'
+import { Pet } from '@/types'
+import { PetPalette } from '@/lib/petColors'
 import Avatar from '@/components/ui/Avatar'
 import Chip from '@/components/ui/Chip'
 import { formatAge } from '@/lib/formatAge'
 import { useTranslations } from 'next-intl'
 
-/** On a single-pet screen there is no list index, so the species picks the tint. */
-const PALETTE_BY_TYPE: Record<PetType, PetPalette> = {
-  cat: PET_PALETTES[0],
-  dog: PET_PALETTES[1],
-}
-
 interface Props {
   pet: Pet
+  palette: PetPalette
 }
 
-const PetProfileHero = ({ pet }: Props) => {
-  const palette = PALETTE_BY_TYPE[pet.type] ?? PET_PALETTES[0]
+const PetProfileHero = ({ pet, palette }: Props) => {
   const t = useTranslations('PetProfile')
 
   return (
