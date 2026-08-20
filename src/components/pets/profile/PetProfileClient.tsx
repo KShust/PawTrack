@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { ArrowLeft } from 'lucide-react'
 import { Pet } from '@/types'
+import { getPetPalette } from '@/lib/petColors'
 import PetProfileHero from './PetProfileHero'
 import OverviewTab from './tabs/OverviewTab'
 import HealthTab from './tabs/HealthTab'
@@ -16,11 +17,13 @@ const TAB_KEYS: Tab[] = ['overview', 'health', 'medical']
 
 interface Props {
   pet: Pet
+  paletteIndex: number
 }
 
-const PetProfileClient = ({ pet }: Props) => {
+const PetProfileClient = ({ pet, paletteIndex }: Props) => {
   const [activeTab, setActiveTab] = useState<Tab>('overview')
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const palette = getPetPalette(paletteIndex)
   const router = useRouter()
   const t = useTranslations('PetProfile')
 
@@ -66,7 +69,7 @@ const PetProfileClient = ({ pet }: Props) => {
       </div>
 
       {/* Hero */}
-      <PetProfileHero pet={pet} />
+      <PetProfileHero pet={pet} palette={palette} />
 
       {/* Tabs */}
       <div
@@ -91,7 +94,7 @@ const PetProfileClient = ({ pet }: Props) => {
               onKeyDown={handleTabKeyDown}
               className="px-4 py-3 text-sm font-medium transition-colors relative"
               style={{
-                color: isSelected ? 'var(--tint-primary-fg)' : 'var(--text-secondary)',
+                color: isSelected ? palette.fg : 'var(--text-secondary)',
                 transitionDuration: 'var(--duration-fast)',
               }}
             >
@@ -100,7 +103,7 @@ const PetProfileClient = ({ pet }: Props) => {
                 <span
                   aria-hidden="true"
                   className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                  style={{ background: 'var(--tint-primary-solid)' }}
+                  style={{ background: palette.solid }}
                 />
               )}
             </button>
@@ -116,7 +119,7 @@ const PetProfileClient = ({ pet }: Props) => {
         tabIndex={0}
         className="px-4 py-4"
       >
-        {activeTab === 'overview' && <OverviewTab pet={pet} />}
+        {activeTab === 'overview' && <OverviewTab pet={pet} palette={palette} />}
         {activeTab === 'health' && <HealthTab />}
         {activeTab === 'medical' && <MedicalTab />}
       </div>
