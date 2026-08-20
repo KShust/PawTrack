@@ -11,6 +11,19 @@ import uk from '../messages/uk.json';
 
 const messagesByLocale = { en, uk } as const;
 
+if (typeof document !== 'undefined') {
+  const root = document.documentElement;
+  let frame = 0;
+
+  new MutationObserver(() => {
+    root.setAttribute('data-theme-switching', '');
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => root.removeAttribute('data-theme-switching'));
+    });
+  }).observe(root, { attributes: true, attributeFilter: ['class'] });
+}
+
 type LocaleKey = keyof typeof messagesByLocale;
 
 /**

@@ -14,9 +14,15 @@ const readToken = (name: string) =>
 /** Accepts the two forms a resolved custom property can come back as. */
 const toRgb = (value: string | undefined): [number, number, number] | null => {
   if (!value) return null
-  const hex = value.replace('#', '')
-  if (/^[0-9a-f]{6}$/i.test(hex)) {
-    return [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16)) as [number, number, number]
+  const hex = value.trim().replace('#', '')
+
+  const normalised =
+    hex.length === 3 || hex.length === 4
+      ? hex.slice(0, 3).split('').map(channel => channel + channel).join('')
+      : hex.slice(0, 6)
+
+  if (/^[0-9a-f]{6}$/i.test(normalised)) {
+    return [0, 2, 4].map(i => parseInt(normalised.slice(i, i + 2), 16)) as [number, number, number]
   }
   const match = value.match(/rgba?\(([^)]+)\)/)
   if (match) {
